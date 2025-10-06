@@ -20,18 +20,48 @@ from lerobot.cameras import CameraConfig
 from lerobot.cameras.opencv import OpenCVCameraConfig
 from lerobot.robots import RobotConfig
 
+from lerobot.cameras.realsense.configuration_realsense import RealSenseCameraConfig
+from lerobot.cameras.realsense.camera_realsense import RealSenseCamera
+from lerobot.cameras.configs import ColorMode, Cv2Rotation
+
+
+# # Instantiate and connect a `RealSenseCamera` with warm-up read (default).
+# camera = RealSenseCamera(config)
+# camera.connect()
+
+# # Capture a color frame via `read()` and a depth map via `read_depth()`.
+# try:
+#     color_frame = camera.read()
+#     depth_map = camera.read_depth()
+#     print("Color frame shape:", color_frame.shape)
+#     print("Depth map shape:", depth_map.shape)
+# finally:
+#     camera.disconnect()
 
 @RobotConfig.register_subclass("papras_follower")
 @dataclass
 class PaprasFollowerConfig(RobotConfig):
     port: str
-    cameras: dict[str, CameraConfig] = field(
+    # Per https://github.com/uiuckimlab/PAPRLE/blob/main/configs/follower/papras_7dof_2arm_table.yaml 
+    # top:
+    # serial_number: '233522070873'
+    # rgb_resolution: [424,240]
+    # depth_resolution: [480, 270]
+    # get_aligned: false
+    # depth_units: 0.000025
+    # cameras: dict[str, CameraConfig] = field(
+    # Maybe https://github.com/uiuckimlab/PAPRLE/blob/main/configs/follower/papras_teleop_bag.yaml 
         default_factory={
-            "cam_1": OpenCVCameraConfig(
-                index_or_path=2,
-                fps=30,
-                width=480,
-                height=640,
-            ),
+            
+            "top": # Create a `RealSenseCameraConfig` specifying your camera’s serial number and enabling depth.
+                RealSenseCameraConfig(
+                    serial_number_or_name="2233522070873",
+                    fps=15,
+                    width=424,
+                    height=240,
+                    color_mode=ColorMode.RGB,
+                    use_depth=True,
+                    rotation=Cv2Rotation.NO_ROTATION
+                )
         }
     )

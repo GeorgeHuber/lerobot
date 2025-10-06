@@ -28,11 +28,14 @@ class PaprasFollower(Robot):
         self.bus = DynamixelMotorsBus(
             port=self.config.port,
             motors={
-                "joint_1": Motor(1, "sts3250", MotorNormMode.RANGE_M100_100),
-                "joint_2": Motor(2, "sts3215", MotorNormMode.RANGE_M100_100),
-                "joint_3": Motor(3, "sts3215", MotorNormMode.RANGE_M100_100),
-                "joint_4": Motor(4, "sts3215", MotorNormMode.RANGE_M100_100),
-                "joint_5": Motor(5, "sts3215", MotorNormMode.RANGE_M100_100),
+                # @TODO: may need to expand motor range
+                "joint1": Motor(1, "x_series", MotorNormMode.RANGE_M100_100, baudrate=460_800),
+                "joint2": Motor(2, "x_series", MotorNormMode.RANGE_M100_100),
+                "joint3": Motor(3, "x_series", MotorNormMode.RANGE_M100_100),
+                "joint4": Motor(4, "x_series", MotorNormMode.RANGE_M100_100),
+                "joint5": Motor(5, "x_series", MotorNormMode.RANGE_M100_100),
+                "joint6": Motor(5, "x_series", MotorNormMode.RANGE_M100_100),
+                "joint7": Motor(5, "x_series", MotorNormMode.RANGE_M100_100),
             },
             calibration=self.calibration,
         )
@@ -41,11 +44,13 @@ class PaprasFollower(Robot):
     @property
     def _motors_ft(self) -> dict[str, type]:
         return {
-            "joint_1.pos": float,
-            "joint_2.pos": float,
-            "joint_3.pos": float,
-            "joint_4.pos": float,
-            "joint_5.pos": float,
+            "joint1.pos": float,
+            "joint2.pos": float,
+            "joint3.pos": float,
+            "joint4.pos": float,
+            "joint5.pos": float,
+            "joint6.pos": float,
+            "joint7.pos": float,
         }
 
     @property
